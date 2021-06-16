@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo -n "Your name here:"
+read -e NOMBRE
+echo -n "Enter the project name:"
+read -e NAME  
+
+if [ -z "$NOMBRE" ] || [ -z "$NAME" ]; then
+	echo "Debe pasar dos argumentos"
+
+else
+	echo "Hola "$NOMBRE
+	mkdir -p ~/Desktop/EjercicioGitScript/$NAME
+	echo "Carpeta "  $NAME " creada con exito"
+fi
