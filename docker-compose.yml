@@ -1,34 +1,41 @@
-version: "3.8"
-
+version: '3'
 services:
-
-    app: 
-        image: php:7.2-apache
-        ports:
-        - 80:80
-        environment:  #
-            MYSQL_HOST:
-            MYSQL_USER:
-            MYSQL_PASSWORD:
-            MYSQL_DB:
-
-    mysql:
-        image: mysql:5.7
-        volumes:
-        - mis_datos:/var/lib/mysql
-        environment:
-            MYSQL_ROOT_PASSWORD:
-            MYSQL_DATABASE:
-
-    phpmyadmin:
-        image: phpmyadmin
-        restart: always
-        ports:
-        - 8080:8080
-        environment:
-        - PMA_ARBITRARY=1
-
+  apachephp:
+    build: .
+    container_name: apachephp
+    ports:
+      - 80:80
+    volumes:
+      - ./web:/var/www/html
+    depends_on:
+      - mariadb
+    networks:
+      - backend
+      - frontend
+  phpmyadmin: 
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpma
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+    networks:
+      - backend
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    volumes: 
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=testdb
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user
+    networks:
+      - backend
 networks:
-volumenes:
-
-    #extensiones docker visual studio
+  backend:
+  frontend:
